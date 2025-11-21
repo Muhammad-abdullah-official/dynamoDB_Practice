@@ -2,14 +2,14 @@
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
 
 // Import our DynamoDB DocumentClient instance (db) and the table name (Table)
-import { db, Table } from "../config/dynamo";
+import { db, Table } from "../config/dynamo.js";
 
 // Import UUID generator for creating unique IDs for users
 import { v4 as uuid } from "uuid";
 
 
 // Exporting a function to create a new user in DynamoDB
-export async function createUser(name, no, address) {
+export async function createUser(name, phNo, address) {
 
     // Generate a unique ID for the user using uuid()
     const userId = uuid();
@@ -28,7 +28,7 @@ export async function createUser(name, no, address) {
 
         // The actual user name we received as function input
         name,
-        no,
+        phNo,
         address
     };
 
@@ -42,6 +42,8 @@ export async function createUser(name, no, address) {
             Item: itemUser
         })
     );
+
+    return itemUser
 }
 
 

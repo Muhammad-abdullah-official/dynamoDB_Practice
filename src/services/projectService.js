@@ -1,7 +1,7 @@
 import { GetCommand,PutCommand,QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { db,Table } from "../config/dynamo";
+import { db,Table } from "../config/dynamo.js";
 import { v4 as uuid } from "uuid";
-import { listTasksByProject } from "./taskService";
+import { listTasksByProject } from "./taskService.js";
 
 export async function createProject(userId,projectName, duration) {
   
@@ -27,7 +27,7 @@ export async function listProject(userId){
 const projectData = await db.send(
   new QueryCommand({
   TableName: Table,
-  keyConditionExpression:`PK = :pk AND begins_with(SK, :project)`,
+  KeyConditionExpression:`PK = :pk AND begins_with(SK, :project)`,
   ExpressionAttributeValues:{
 ":pk" :`USER#${userId}`,
 ":project":`PROJECT#`

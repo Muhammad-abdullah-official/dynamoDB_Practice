@@ -1,7 +1,6 @@
 import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { ddb, TABLE } from "../dynamoClient.js";
+import { db, Table } from "../config/dynamo.js";
 import { v4 as uuid } from "uuid";
-import { Table } from "../config/dynamo.js";
 
 export async function createTask(projectId, taskTitle, status, priority, assignedTo) {
   const taskId = uuid()
@@ -26,24 +25,28 @@ await db.send(new PutCommand({
   Item: itemTask
 }))
 
-return item
+return itemTask
 
 }
 
 export async function listTasksByProject(projectId){
+  console.log('//////////// Tasks By Project //////////////');
+  
 return(
   await db.send(new QueryCommand({
     TableName:Table,
-    KeyConditionExpression: "PK= :pk AND begins_with(sk, :task)",
+    KeyConditionExpression: "PK= :pk AND begins_with(SK, :task)",
     ExpressionAttributeValues: {
       ":pk": `PROJECT#${projectId}`,
       ":task": `TASK#`
     }
   }))
-).items
+).Items
 }
 
 export async function listTaskByStatus(status) {
+  console.log('//////////// Tasks By Status //////////////');
+
   return(
     await db.send(new QueryCommand({
       TableName: Table,
@@ -53,7 +56,7 @@ export async function listTaskByStatus(status) {
         ":pk": `TASK_STATUS#${status}`
       }
     }))
-  ).items
+  ).Items
 }
 
 
